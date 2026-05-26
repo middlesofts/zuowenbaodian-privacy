@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>作文宝典 隐私政策</title>
+  <style>
+    :root {
+      --primary: #4CAF82;
+      --primary-dark: #2E7D5A;
+      --primary-light: #E8F5E9;
+      --text: #1A1A1A;
+      --text-secondary: #555;
+      --border: #E0E0E0;
+      --bg: #FAFAFA;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+    }
+
+    /* ── 顶部 Hero ── */
+    .hero {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      padding: 48px 24px 40px;
+      text-align: center;
+      color: white;
+    }
+    .hero-icon {
+      width: 64px; height: 64px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 18px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+    .hero h1 { font-size: 26px; font-weight: 700; letter-spacing: 1px; }
+    .hero .subtitle { font-size: 14px; opacity: 0.85; margin-top: 6px; }
+    .hero .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    /* ── 主体布局 ── */
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    /* ── 更新信息栏 ── */
+    .meta-bar {
+      display: flex; gap: 24px; flex-wrap: wrap;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .meta-bar span strong { color: var(--text); }
+
+    /* ── 章节卡片 ── */
+    .section {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .section-header {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--primary-light);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-icon {
+      width: 36px; height: 36px;
+      background: var(--primary);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .section-header h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+    .section-body { padding: 20px 24px; }
+
+    /* ── 文字样式 ── */
+    p { font-size: 14.5px; color: var(--text-secondary); margin-bottom: 12px; }
+    p:last-child { margin-bottom: 0; }
+
+    ul, ol { padding-left: 20px; margin-bottom: 12px; }
+    li { font-size: 14.5px; color: var(--text-secondary); margin-bottom: 6px; }
+
+    .highlight-box {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      margin: 14px 0;
+      font-size: 14px;
+      color: var(--primary-dark);
+    }
+
+    .warn-box {
+      background: #FFF8E1;
+      border-left: 4px solid #FFB300;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      margin: 14px 0;
+      font-size: 14px;
+      color: #7A5C00;
+    }
+
+    /* ── 信息表格 ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin: 14px 0;
+    }
+    th {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-weight: 700;
+      padding: 10px 14px;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+    td {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: #F9F9F9; }
+
+    /* ── 联系卡片 ── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-top: 4px;
+    }
+    .contact-item {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .contact-item .icon { font-size: 28px; margin-bottom: 8px; }
+    .contact-item .label { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+    .contact-item .value { font-size: 14px; font-weight: 700; color: var(--primary-dark); word-break: break-all; }
+
+    /* ── 页脚 ── */
+    .footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: #999;
+      border-top: 1px solid var(--border);
+    }
+    .footer a { color: var(--primary); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 22px; }
+      .container { padding: 20px 16px 48px; }
+      .section-body { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Hero ── -->
+<div class="hero">
+  <div class="hero-icon">📝</div>
+  <h1>作文宝典 隐私政策</h1>
+  <div class="subtitle">MIDSOFT · 勉知文化</div>
+  <div class="badge">适用版本：MIDSOFT202602 V0.21 及以上</div>
+</div>
+
+<!-- ── 主体 ── -->
+<div class="container">
+
+  <!-- 更新时间 -->
+  <div class="meta-bar">
+    <span>📅 <strong>发布日期：</strong>2026年5月26日</span>
+    <span>🔄 <strong>生效日期：</strong>2026年5月26日</span>
+    <span>📱 <strong>适用平台：</strong>Android</span>
+    <span>🏢 <strong>开发者：</strong>勉知文化</span>
+  </div>
+
+  <!-- 引言 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">👋</div>
+      <h2>引言</h2>
+    </div>
+    <div class="section-body">
+      <p>《作文宝典》（以下简称"本应用"或"我们"）由勉知文化开发和运营。我们深知个人信息对您的重要性，将竭力保护您的个人信息安全可靠。</p>
+      <p>本隐私政策说明我们如何收集、使用和保护您在使用本应用时提供的个人信息。<strong>请在使用本应用前仔细阅读本政策。</strong>如您不同意本政策，请停止使用本应用。</p>
+      <div class="highlight-box">
+        📌 本应用主要面向中小学生用户，如您未满14周岁，请在监护人陪同下阅读本政策并在监护人同意后使用本应用。
+      </div>
+    </div>
+  </div>
+
+  <!-- 一、收集的信息 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">📋</div>
+      <h2>一、我们收集的信息</h2>
+    </div>
+    <div class="section-body">
+      <p>为提供正常服务，我们会收集以下类别的信息：</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>信息类别</th>
+            <th>具体内容</th>
+            <th>收集方式</th>
+            <th>是否必须</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>账户信息</td>
+            <td>手机号码</td>
+            <td>用户主动填写</td>
+            <td>✅ 必须（注册登录）</td>
+          </tr>
+          <tr>
+            <td>学籍信息</td>
+            <td>年级（如"三年级"）、学校名称（选填）、所在省市（选填）</td>
+            <td>用户主动填写</td>
+            <td>年级必须，其余选填</td>
+          </tr>
+          <tr>
+            <td>作文内容</td>
+            <td>用户输入/拍照上传的作文文本、OCR识别结果</td>
+            <td>用户主动提交</td>
+            <td>✅ 必须（核心功能）</td>
+          </tr>
+          <tr>
+            <td>设备信息</td>
+            <td>设备型号、操作系统版本、Android ID、应用版本号</td>
+            <td>系统自动获取</td>
+            <td>✅ 必须（服务稳定性）</td>
+          </tr>
+          <tr>
+            <td>使用日志</td>
+            <td>功能使用记录、错误日志、崩溃信息</td>
+            <td>系统自动记录</td>
+            <td>✅ 必须（质量优化）</td>
+          </tr>
+          <tr>
+            <td>支付信息</td>
+            <td>服务购买记录、课时余额变更记录（不含银行卡/支付账户信息）</td>
+            <td>服务行为自动生成</td>
+            <td>✅ 必须（扣费验证）</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="warn-box">
+        ⚠️ 我们<strong>不会</strong>收集您的位置信息、通讯录、相机（除用户主动拍照时）、麦克风（语音输入由系统 Intent 处理，音频数据不经过本应用服务器）等敏感权限数据。
+      </div>
+    </div>
+  </div>
+
+  <!-- 二、信息用途 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">🎯</div>
+      <h2>二、信息用途</h2>
+    </div>
+    <div class="section-body">
+      <p>我们收集的信息仅用于以下目的，不会超出下述范围使用：</p>
+
+      <ul>
+        <li><strong>注册与登录：</strong>通过手机号验证您的账户身份，确保账户安全。</li>
+        <li><strong>扣费验证：</strong>核实您的账户余额与课时，完成 AI 批改服务的计费与核销。</li>
+        <li><strong>内容服务：</strong>将作文内容发送至 AI 模型进行六维度智能批改，生成批改报告、学习报告及范文。</li>
+        <li><strong>个性化学习：</strong>根据您的年级信息，提供符合对应学段的写作评价标准与指导建议。</li>
+        <li><strong>服务优化：</strong>使用设备信息与日志数据分析应用稳定性，修复错误，改善用户体验。</li>
+        <li><strong>客服支持：</strong>在您通过短信反馈问题时，用于核实身份并回复处理。</li>
+      </ul>
+
+      <div class="highlight-box">
+        🔒 我们不会将您的个人信息用于任何形式的商业广告推送，也不会向任何第三方出售您的个人信息。
+      </div>
+    </div>
+  </div>
+
+  <!-- 三、数据存储 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">🗄️</div>
+      <h2>三、数据存储方式</h2>
+    </div>
+    <div class="section-body">
+      <p>我们采用以下方式存储和保护您的数据：</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>存储位置</th>
+            <th>存储内容</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>📱 设备本地（Room 数据库）</td>
+            <td>批改历史记录、草稿、版本历史</td>
+            <td>仅存储在您的设备上，卸载应用即删除</td>
+          </tr>
+          <tr>
+            <td>☁️ 华为 AppGallery Connect（AGC）云数据库</td>
+            <td>账户信息（手机号、年级、余额、课时）、服务订购记录</td>
+            <td>存储于华为 AGC 平台，遵循华为数据安全标准，数据存储于中国境内服务器</td>
+          </tr>
+          <tr>
+            <td>🤖 AI 服务接口（第三方 LLM）</td>
+            <td>作文文本（仅在批改时传输，不留存）</td>
+            <td>仅用于单次批改调用，AI 服务商不存储原文内容</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p><strong>存储期限：</strong>您的账户数据在账号注销后 30 天内从服务器彻底删除；设备本地数据在卸载应用时立即删除。</p>
+
+      <div class="highlight-box">
+        🛡️ 所有与服务器的通信均采用 HTTPS 加密传输。华为 AGC 云数据库具备数据加密存储能力，我们的服务均部署在中国大陆，数据不跨境传输。
+      </div>
+    </div>
+  </div>
+
+  <!-- 四、用户权利 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">⚖️</div>
+      <h2>四、您的权利</h2>
+    </div>
+    <div class="section-body">
+      <p>根据《个人信息保护法》及相关法规，您对自己的个人信息享有以下权利：</p>
+
+      <ul>
+        <li>
+          <strong>查阅权：</strong>您可以在"我的 → 个人资料"中随时查看您的账户信息（手机号、年级、学校等）。
+        </li>
+        <li>
+          <strong>更正权：</strong>您可以在"我的 → 个人资料"中随时修改年级、学校、省市等信息；如需更换手机号，请联系客服协助。
+        </li>
+        <li>
+          <strong>删除权：</strong>您可以在"我的 → 批改历史"中删除单条或全部批改记录。
+        </li>
+        <li>
+          <strong>账号注销权：</strong>您可以通过发送短信至 <strong>13135394498</strong>（标注"注销账号"）申请注销。注销后，我们将在 30 天内删除服务器上与您账号相关的所有个人数据，且该操作不可恢复。
+        </li>
+        <li>
+          <strong>撤回同意权：</strong>您可以随时关闭不必要的权限（如相机权限），但关闭核心权限可能导致部分功能无法使用。
+        </li>
+        <li>
+          <strong>投诉权：</strong>如您认为我们处理您个人信息的行为违反了法律法规，您有权向主管部门进行投诉举报。
+        </li>
+      </ul>
+
+      <div class="warn-box">
+        ⚠️ 请注意，账号注销后余额与课时将同时清零且不予退还，请在注销前确认已使用完毕或联系客服处理退款事宜。
+      </div>
+    </div>
+  </div>
+
+  <!-- 五、第三方 SDK -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">🔌</div>
+      <h2>五、第三方 SDK 说明</h2>
+    </div>
+    <div class="section-body">
+      <p>本应用集成了以下第三方 SDK，它们可能独立收集必要的数据：</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>SDK 名称</th>
+            <th>用途</th>
+            <th>收集信息</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Google ML Kit（文字识别）</td>
+            <td>OCR 识别作文图片中的文字</td>
+            <td>仅在设备本地处理，不上传图片</td>
+          </tr>
+          <tr>
+            <td>华为 AGC（AppGallery Connect）</td>
+            <td>云数据库、账号体系</td>
+            <td>设备标识、账户信息</td>
+          </tr>
+          <tr>
+            <td>Android CameraX</td>
+            <td>拍照识别功能</td>
+            <td>仅在用户主动触发时访问相机</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 六、未成年人保护 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">👦</div>
+      <h2>六、未成年人保护</h2>
+    </div>
+    <div class="section-body">
+      <p>本应用的主要用户群体为中小学生。我们对未成年用户的信息保护尤为重视：</p>
+      <ul>
+        <li>我们不会收集未成年人不必要的敏感信息。</li>
+        <li>不满14周岁的用户，应在家长或监护人指导下使用本应用，并由监护人代为同意本隐私政策。</li>
+        <li>如我们发现未经监护人同意收集了未满14周岁用户的个人信息，将尽快删除相关数据。</li>
+        <li>家长如需了解或删除子女的使用数据，可通过下方联系方式与我们取得联系。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 七、政策更新 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">🔄</div>
+      <h2>七、隐私政策的更新</h2>
+    </div>
+    <div class="section-body">
+      <p>我们可能会不定期更新本隐私政策。更新后，我们将通过应用内通知或弹窗的形式告知您。</p>
+      <p>如更新内容涉及您的重要权益（如新增信息收集类别），我们将以显著方式告知并重新获取您的同意。</p>
+      <p>继续使用本应用即表示您同意更新后的隐私政策。如您不同意，请停止使用本应用并联系我们注销账号。</p>
+    </div>
+  </div>
+
+  <!-- 八、联系方式 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">📞</div>
+      <h2>八、联系我们</h2>
+    </div>
+    <div class="section-body">
+      <p>如您对本隐私政策有任何疑问，或需要行使上述权利，请通过以下方式与我们联系。我们将在 <strong>15个工作日内</strong>回复您。</p>
+
+      <div class="contact-grid">
+        <div class="contact-item">
+          <div class="icon">✉️</div>
+          <div class="label">电子邮箱</div>
+          <div class="value">middlesoft@126.com</div>
+        </div>
+        <div class="contact-item">
+          <div class="icon">💬</div>
+          <div class="label">客服短信</div>
+          <div class="value">13135394498</div>
+        </div>
+        <div class="contact-item">
+          <div class="icon">🏢</div>
+          <div class="label">开发者 / 运营方</div>
+          <div class="value">勉知文化</div>
+        </div>
+        <div class="contact-item">
+          <div class="icon">📍</div>
+          <div class="label">注册地</div>
+          <div class="value">湖南省邵东市</div>
+        </div>
+      </div>
+
+      <div class="highlight-box" style="margin-top:20px;">
+        📱 在应用内：前往「我的 → 意见反馈」，点击「发送短信反馈」即可直接发送反馈至客服号码。
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<div class="footer">
+  <p>© 2026 勉知文化 · 作文宝典（MIDSOFT）· 保留所有权利</p>
+  <p style="margin-top:6px;">本政策依据《中华人民共和国个人信息保护法》《网络安全法》及相关法规制定</p>
+</div>
+
+</body>
+</html>
