@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>作文宝典 - App 原型</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: #1a1a2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  /* 手机框 */
+  .phone-frame {
+    width: 375px;
+    height: 812px;
+    background: #000;
+    border-radius: 50px;
+    padding: 12px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6), inset 0 0 0 2px #333;
+    position: relative;
+    overflow: hidden;
+  }
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 40px;
+    overflow: hidden;
+    position: relative;
+    background: #fff;
+  }
+
+  /* 页面 */
+  .page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0; left: 0;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .page.active { display: flex; }
+
+  /* 状态栏 */
+  .status-bar {
+    height: 44px;
+    padding: 12px 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  /* ======== 首页 ======== */
+  #page-home {
+    background: linear-gradient(160deg, #667eea 0%, #764ba2 100%);
+  }
+  #page-home .status-bar { color: rgba(255,255,255,0.9); }
+  .home-hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: white;
+  }
+  .app-logo {
+    width: 90px;
+    height: 90px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+  .app-name {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  }
+  .app-slogan {
+    font-size: 14px;
+    opacity: 0.85;
+    letter-spacing: 1px;
+    margin-bottom: 40px;
+  }
+  .feature-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 32px;
+  }
+  .feature-card {
+    background: rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 12px 6px;
+    text-align: center;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .feature-card .icon { font-size: 22px; margin-bottom: 4px; }
+  .feature-card .label { font-size: 10px; opacity: 0.9; line-height: 1.3; }
+
+  .btn-main {
+    width: 100%;
+    padding: 16px;
+    border-radius: 20px;
+    border: none;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn-main:active { transform: scale(0.97); }
+  .btn-start {
+    background: white;
+    color: #764ba2;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+    margin-bottom: 12px;
+  }
+  .btn-history {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.4) !important;
+  }
+
+  /* ======== 拍照页 ======== */
+  #page-camera {
+    background: #0a0a0a;
+  }
+  #page-camera .status-bar { color: white; }
+  .nav-bar {
+    height: 52px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    flex-shrink: 0;
+  }
+  .nav-back {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: white;
+  }
+  .nav-title {
+    flex: 1;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    letter-spacing: 1px;
+  }
+  .nav-right { width: 36px; }
+
+  .camera-viewfinder {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .camera-bg {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* 模拟取景框内容 */
+  .paper-preview {
+    width: 280px;
+    height: 380px;
+    background: #fefefe;
+    border-radius: 4px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 0 60px rgba(255,255,255,0.1);
+  }
+  .paper-lines { }
+  .paper-line {
+    height: 1px;
+    background: #e8e0d0;
+    margin-bottom: 22px;
+    position: relative;
+  }
+  .paper-line::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; top: -10px;
+    height: 20px;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 9px,
+      #e8e0d0 9px,
+      #e8e0d0 10px
+    );
+    opacity: 0.3;
+  }
+  .handwriting {
+    position: absolute;
+    top: 20px; left: 20px; right: 20px;
+    font-family: 'STKaiti', '楷体', cursive;
+    font-size: 13px;
+    color: #2c2c2c;
+    line-height: 22px;
+  }
+
+  /* 取景框角标 */
+  .corner-marks {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 400px;
+  }
+  .corner {
+    position: absolute;
+    width: 24px; height: 24px;
+    border-color: #667eea;
+    border-style: solid;
+    border-width: 0;
+  }
+  .corner-tl { top: 0; left: 0; border-top-width: 3px; border-left-width: 3px; border-radius: 4px 0 0 0; }
+  .corner-tr { top: 0; right: 0; border-top-width: 3px; border-right-width: 3px; border-radius: 0 4px 0 0; }
+  .corner-bl { bottom: 0; left: 0; border-bottom-width: 3px; border-left-width: 3px; border-radius: 0 0 0 4px; }
+  .corner-br { bottom: 0; right: 0; border-bottom-width: 3px; border-right-width: 3px; border-radius: 0 0 4px 0; }
+
+  /* 底部相机控制 */
+  .camera-controls {
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 30px;
+    flex-shrink: 0;
+  }
+  .ctrl-btn-side {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    transition: background 0.2s;
+  }
+  .ctrl-btn-side:active { background: rgba(255,255,255,0.25); }
+  .shutter-btn {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: white;
+    border: 4px solid rgba(255,255,255,0.4);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.15);
+    transition: transform 0.15s;
+    position: relative;
+  }
+  .shutter-btn::after {
+    content: '';
+    position: absolute;
+    width: 56px; height: 56px;
+    background: white;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+  }
+  .shutter-btn:active { transform: scale(0.93); }
+  .camera-hint {
+    text-align: center;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    margin-top: -20px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+  }
+
+  /* ======== 分析中页 ======== */
+  #page-analyzing {
+    background: linear-gradient(160deg, #f8f9ff 0%, #eef2ff 100%);
+  }
+  #page-analyzing .status-bar { color: #333; }
+  .analyzing-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+  .analyzing-img {
+    width: 200px;
+    height: 240px;
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 8px 30px rgba(102,126,234,0.2);
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .analyzing-img::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(102,126,234,0.15), transparent);
+    animation: shimmer 1.8s infinite;
+  }
+  @keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 200%; }
+  }
+  .analyzing-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+  .analyzing-sub {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 28px;
+  }
+  .progress-bar-wrap {
+    width: 100%;
+    height: 6px;
+    background: #e8ecff;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 3px;
+    animation: progress 3s ease-out forwards;
+  }
+  @keyframes progress {
+    0% { width: 0%; }
+    40% { width: 60%; }
+    80% { width: 85%; }
+    100% { width: 98%; }
+  }
+  .analysis-steps {
+    width: 100%;
+  }
+  .step-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    font-size: 13px;
+    color: #555;
+    animation: fadeInStep 0.4s ease forwards;
+    opacity: 0;
+  }
+  .step-item:nth-child(1) { animation-delay: 0.3s; }
+  .step-item:nth-child(2) { animation-delay: 0.8s; }
+  .step-item:nth-child(3) { animation-delay: 1.3s; }
+  .step-item:nth-child(4) { animation-delay: 1.8s; }
+  .step-item:nth-child(5) { animation-delay: 2.2s; }
+  .step-item:nth-child(6) { animation-delay: 2.6s; }
+  @keyframes fadeInStep {
+    to { opacity: 1; }
+  }
+  .step-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  /* ======== 结果页 ======== */
+  #page-result {
+    background: #f4f6fc;
+  }
+  #page-result .status-bar { color: #333; }
+  #page-result .nav-bar { background: white; border-bottom: 1px solid #eee; }
+  #page-result .nav-back { background: #f0f0f7; color: #555; }
+  #page-result .nav-title { color: #333; }
+
+  .result-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 14px 20px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .result-scroll::-webkit-scrollbar { display: none; }
+
+  /* 原文预览卡 */
+  .original-card {
+    background: white;
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .card-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #222;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  .tag-original { background: #f0f0ff; color: #667eea; }
+  .original-text {
+    font-size: 13px;
+    line-height: 1.9;
+    color: #444;
+    font-family: 'STKaiti', '楷体', serif;
+    border-left: 3px solid #667eea;
+    padding-left: 10px;
+  }
+
+  /* 综合评分 */
+  .score-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    color: white;
+  }
+  .score-header {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    opacity: 0.9;
+  }
+  .score-main {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .score-num {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .score-total { font-size: 16px; opacity: 0.7; margin-bottom: 8px; }
+  .score-label { font-size: 18px; font-weight: 600; opacity: 0.9; margin-bottom: 6px; }
+  .score-bars {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .mini-score {
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 8px;
+    text-align: center;
+  }
+  .mini-score-val { font-size: 18px; font-weight: 700; }
+  .mini-score-label { font-size: 10px; opacity: 0.8; margin-top: 2px; }
+
+  /* 分析模块卡片 */
+  .analysis-card {
+    background: white;
+    border-radius: 16px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .analysis-card-header {
+    padding: 13px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .module-icon {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+  .module-info { flex: 1; }
+  .module-name { font-size: 14px; font-weight: 700; color: #222; }
+  .module-meta { font-size: 11px; color: #999; margin-top: 2px; }
+  .module-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+  .badge-error { background: #fff0f0; color: #e53935; }
+  .badge-warn { background: #fff8e1; color: #f57c00; }
+  .badge-good { background: #e8f5e9; color: #2e7d32; }
+  .expand-arrow {
+    font-size: 11px;
+    color: #bbb;
+    transition: transform 0.3s;
+    margin-left: 4px;
+  }
+  .expand-arrow.open { transform: rotate(180deg); }
+
+  .analysis-body {
+    display: none;
+    padding: 0 16px 16px;
+    border-top: 1px solid #f5f5f5;
+  }
+  .analysis-body.open { display: block; }
+
+  /* 错误词标注 */
+  .error-list { margin-top: 12px; }
+  .error-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px 12px;
+    background: #fff8f8;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    border-left: 3px solid #e53935;
+  }
+  .error-num {
+    width: 20px; height: 20px;
+    background: #e53935;
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .error-detail { font-size: 12.5px; line-height: 1.7; color: #444; }
+  .error-word { color: #e53935; font-weight: 700; text-decoration: line-through; }
+  .correct-word { color: #2e7d32; font-weight: 700; }
+  .error-reason { color: #888; font-size: 11.5px; display: block; margin-top: 2px; }
+
+  /* 病句修改 */
+  .bingju-item {
+    background: #fffbf0;
+    border-radius: 10px;
+    padding: 11px 12px;
+    margin-top: 10px;
+    border-left: 3px solid #f57c00;
+  }
+  .sentence-original {
+    font-size: 12.5px;
+    color: #c62828;
+    text-decoration: line-through;
+    margin-bottom: 6px;
+  }
+  .sentence-arrow { font-size: 11px; color: #999; margin-bottom: 4px; }
+  .sentence-fixed { font-size: 12.5px; color: #1b5e20; font-weight: 500; margin-bottom: 6px; }
+  .sentence-reason { font-size: 11.5px; color: #888; background: #f5f5f5; padding: 5px 8px; border-radius: 6px; }
+
+  /* 修辞手法 */
+  .rhetoric-item {
+    background: #f8f4ff;
+    border-radius: 10px;
+    padding: 11px 12px;
+    margin-top: 10px;
+    border-left: 3px solid #9c27b0;
+  }
+  .rhetoric-original { font-size: 12.5px; color: #555; margin-bottom: 6px; line-height: 1.6; }
+  .rhetoric-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 6px; }
+  .rhetoric-tag {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+  .tag-biyv { background: #e8f5e9; color: #2e7d32; }
+  .tag-paibi { background: #e3f2fd; color: #1565c0; }
+  .tag-yongren { background: #fce4ec; color: #c2185b; }
+  .tag-set { background: #ede7f6; color: #4527a0; }
+  .rhetoric-suggest { font-size: 12px; color: #666; line-height: 1.7; }
+  .rhetoric-example { font-size: 12px; color: #7b1fa2; font-style: italic; background: #f3e5f5; padding: 5px 8px; border-radius: 6px; margin-top: 5px; }
+
+  /* 语言风格 */
+  .style-radar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .style-item {
+    background: #f8f9ff;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  .style-label { font-size: 11px; color: #888; margin-bottom: 5px; }
+  .style-bar-wrap { height: 6px; background: #e8ecff; border-radius: 3px; overflow: hidden; margin-bottom: 4px; }
+  .style-bar { height: 100%; border-radius: 3px; }
+  .style-score { font-size: 12px; color: #555; font-weight: 600; }
+  .style-suggest-box {
+    background: #f0f4ff;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-top: 10px;
+    font-size: 12.5px;
+    color: #444;
+    line-height: 1.7;
+  }
+
+  /* 情感表达 */
+  .emotion-chart {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+  }
+  .emotion-bar-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .emotion-bar-fill {
+    width: 28px;
+    border-radius: 4px 4px 0 0;
+    min-height: 8px;
+  }
+  .emotion-bar-label { font-size: 9px; color: #888; text-align: center; }
+  .emotion-tip {
+    background: #fff8e1;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    color: #555;
+    line-height: 1.7;
+    border-left: 3px solid #ffc107;
+  }
+
+  /* 写作手法 */
+  .method-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid #f5f5f5;
+  }
+  .method-item:last-child { border-bottom: none; }
+  .method-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .method-content { flex: 1; font-size: 12.5px; color: #444; line-height: 1.5; }
+  .method-status {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  .status-used { background: #e8f5e9; color: #2e7d32; }
+  .status-suggest { background: #e3f2fd; color: #1565c0; }
+
+  /* 底部操作栏 */
+  .result-actions {
+    padding: 12px 14px;
+    display: flex;
+    gap: 8px;
+    background: white;
+    border-top: 1px solid #eee;
+    flex-shrink: 0;
+  }
+  .action-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 14px;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: transform 0.15s;
+  }
+  .action-btn:active { transform: scale(0.97); }
+  .btn-share { background: #f0f0ff; color: #667eea; }
+  .btn-save { background: #f0fff4; color: #2e7d32; }
+  .btn-reanalyze { background: linear-gradient(135deg, #667eea, #764ba2); color: white; flex: 1.5; }
+
+  /* 历史页 */
+  #page-history {
+    background: #f4f6fc;
+  }
+  #page-history .status-bar { color: #333; }
+  #page-history .nav-bar { background: white; border-bottom: 1px solid #eee; }
+  #page-history .nav-back { background: #f0f0f7; color: #555; }
+  #page-history .nav-title { color: #333; }
+  .history-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 14px;
+  }
+  .history-item {
+    background: white;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: flex;
+    gap: 12px;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .history-item:active { transform: scale(0.99); }
+  .history-thumb {
+    width: 52px; height: 66px;
+    background: #f0f0ff;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .history-info { flex: 1; }
+  .history-title { font-size: 14px; font-weight: 600; color: #222; margin-bottom: 4px; }
+  .history-meta { font-size: 12px; color: #999; margin-bottom: 6px; }
+  .history-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .history-tag {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 6px;
+  }
+  .history-score {
+    font-size: 22px;
+    font-weight: 800;
+    color: #667eea;
+    align-self: center;
+    flex-shrink: 0;
+  }
+
+  /* 导航条 */
+  .bottom-nav {
+    height: 58px;
+    background: white;
+    border-top: 1px solid #eee;
+    display: flex;
+    flex-shrink: 0;
+  }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    cursor: pointer;
+    font-size: 10px;
+    color: #bbb;
+    transition: color 0.2s;
+  }
+  .nav-item.active { color: #667eea; }
+  .nav-item .nav-icon { font-size: 20px; }
+
+  /* 通用样式 */
+  .divider { height: 1px; background: #f0f0f0; margin: 8px 0; }
+  .info-box {
+    background: #f8f9ff;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-top: 10px;
+    font-size: 12.5px;
+    color: #555;
+    line-height: 1.7;
+  }
+
+  /* Toast */
+  .toast {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.75);
+    color: white;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="phone-screen">
+
+    <!-- ====== 首页 ====== -->
+    <div class="page active" id="page-home">
+      <div class="status-bar">
+        <span>9:41</span>
+        <span>📶 🔋</span>
+      </div>
+      <div class="home-hero">
+        <div class="app-logo">📝</div>
+        <div class="app-name">作文宝典</div>
+        <div class="app-slogan">AI 智能作文批改 · 让每篇作文都进步</div>
+        <div class="feature-cards">
+          <div class="feature-card">
+            <div class="icon">🔍</div>
+            <div class="label">错字检测</div>
+          </div>
+          <div class="feature-card">
+            <div class="icon">✍️</div>
+            <div class="label">病句修改</div>
+          </div>
+          <div class="feature-card">
+            <div class="icon">🎨</div>
+            <div class="label">修辞润色</div>
+          </div>
+          <div class="feature-card">
+            <div class="icon">🎭</div>
+            <div class="label">风格多样</div>
+          </div>
+          <div class="feature-card">
+            <div class="icon">💭</div>
+            <div class="label">情感分析</div>
+          </div>
+          <div class="feature-card">
+            <div class="icon">🖊️</div>
+            <div class="label">写作手法</div>
+          </div>
+        </div>
+        <button class="btn-main btn-start" onclick="showPage('page-camera')">📷 拍照批改作文</button>
+        <button class="btn-main btn-history" onclick="showPage('page-history')">📋 查看历史记录</button>
+      </div>
+    </div>
+
+    <!-- ====== 拍照页 ====== -->
+    <div class="page" id="page-camera">
+      <div class="status-bar" style="background:#0a0a0a;">
+        <span style="color:white">9:41</span>
+        <span style="color:white">📶 🔋</span>
+      </div>
+      <div class="nav-bar">
+        <div class="nav-back" onclick="showPage('page-home')">‹</div>
+        <div class="nav-title">拍摄作文</div>
+        <div class="nav-right"></div>
+      </div>
+
+      <div class="camera-viewfinder">
+        <div class="camera-bg">
+          <div class="paper-preview">
+            <div class="handwriting">
+              今天，我和妈妈去公园玩。公园里的花开的很漂亮，有红的，有黄的，还有蓝的。我看到一只小蝴蝶在花上飞，它的翅膀很颜色好看。我和妈妈照了很多相片，心情非常高兴的。回家的路上，天气真的太好了。
+            </div>
+            <div class="paper-lines">
+              <div class="paper-line"></div><div class="paper-line"></div>
+              <div class="paper-line"></div><div class="paper-line"></div>
+              <div class="paper-line"></div><div class="paper-line"></div>
+              <div class="paper-line"></div><div class="paper-line"></div>
+            </div>
+          </div>
+        </div>
+        <div class="corner-marks">
+          <div class="corner corner-tl"></div>
+          <div class="corner corner-tr"></div>
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+        </div>
+      </div>
+
+      <div class="camera-hint">将作文放入取景框内，保持稳定</div>
+      <div class="camera-controls">
+        <div class="ctrl-btn-side" onclick="showToast('已切换为相册选图')">🖼️</div>
+        <div class="shutter-btn" onclick="startAnalysis()"></div>
+        <div class="ctrl-btn-side" onclick="showToast('已切换镜头')">🔄</div>
+      </div>
+    </div>
+
+    <!-- ====== 分析中页 ====== -->
+    <div class="page" id="page-analyzing">
+      <div class="status-bar">
+        <span>9:41</span>
+        <span>📶 🔋</span>
+      </div>
+      <div class="analyzing-body">
+        <div class="analyzing-img">
+          <div style="font-family:'STKaiti','楷体',serif;font-size:11px;color:#444;line-height:1.9">
+            今天，我和妈妈去公园玩。公园里的花开的很漂亮，有红的，有黄的，还有蓝的。我看到一只小蝴蝶在花上飞，它的翅膀很颜色好看。我和妈妈照了很多相片，心情非常高兴的。
+          </div>
+        </div>
+        <div class="analyzing-text">AI 正在批改作文…</div>
+        <div class="analyzing-sub">识别文字 · 多维度深度分析中</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+        <div class="analysis-steps">
+          <div class="step-item">
+            <div class="step-icon">✓</div>
+            <span>图像识别 &amp; 文字提取完成</span>
+          </div>
+          <div class="step-item">
+            <div class="step-icon">✓</div>
+            <span>错别字 &amp; 词语检测中…</span>
+          </div>
+          <div class="step-item">
+            <div class="step-icon">✓</div>
+            <span>病句语法检查中…</span>
+          </div>
+          <div class="step-item">
+            <div class="step-icon">✓</div>
+            <span>修辞手法分析中…</span>
+          </div>
+          <div class="step-item">
+            <div class="step-icon">✓</div>
+            <span>语言风格 &amp; 情感评估中…</span>
+          </div>
+          <div class="step-item">
+            <div class="step-icon">✓</div>
+            <span>写作手法综合点评生成中…</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== 结果页 ====== -->
+    <div class="page" id="page-result">
+      <div class="status-bar">
+        <span>9:43</span>
+        <span>📶 🔋</span>
+      </div>
+      <div class="nav-bar">
+        <div class="nav-back" onclick="showPage('page-home')">‹</div>
+        <div class="nav-title">批改结果</div>
+        <div class="nav-right" style="font-size:18px;cursor:pointer" onclick="showToast('分享功能')">⋯</div>
+      </div>
+
+      <div class="result-scroll">
+
+        <!-- 原文 -->
+        <div class="original-card">
+          <div class="card-title-row">
+            <div class="card-title">📄 识别原文</div>
+            <span class="card-tag tag-original">共 111 字</span>
+          </div>
+          <div class="original-text">
+            今天，我和妈妈去公园玩。公园里的花开的很漂亮，有红的，有黄的，还有蓝的。我看到一只小蝴蝶在花上飞，它的翅膀很颜色好看。我和妈妈照了很多相片，心情非常高兴的。回家的路上，天气真的太好了。
+          </div>
+        </div>
+
+        <!-- 综合评分 -->
+        <div class="score-card">
+          <div class="score-header">✨ AI 综合评分</div>
+          <div class="score-main">
+            <div class="score-num">72</div>
+            <div>
+              <div class="score-total">/ 100</div>
+              <div class="score-label">良好 · 有提升空间</div>
+            </div>
+          </div>
+          <div class="score-bars">
+            <div class="mini-score">
+              <div class="mini-score-val">65</div>
+              <div class="mini-score-label">语言规范</div>
+            </div>
+            <div class="mini-score">
+              <div class="mini-score-val">70</div>
+              <div class="mini-score-label">表达生动</div>
+            </div>
+            <div class="mini-score">
+              <div class="mini-score-val">80</div>
+              <div class="mini-score-label">内容完整</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 模块1: 错字词 -->
+        <div class="analysis-card">
+          <div class="analysis-card-header" onclick="toggleCard(this)">
+            <div class="module-icon" style="background:#fff0f0">🔍</div>
+            <div class="module-info">
+              <div class="module-name">① 错字词检查</div>
+              <div class="module-meta">发现 3 处错误</div>
+            </div>
+            <span class="module-badge badge-error">3 处错误</span>
+            <span class="expand-arrow open">▼</span>
+          </div>
+          <div class="analysis-body open">
+            <div class="error-list">
+              <div class="error-item">
+                <div class="error-num">1</div>
+                <div class="error-detail">
+                  "<span class="error-word">相片</span>" → "<span class="correct-word">照片</span>"
+                  <span class="error-reason">「相片」是粤语用法，普通话书面语应用「照片」</span>
+                </div>
+              </div>
+              <div class="error-item">
+                <div class="error-num">2</div>
+                <div class="error-detail">
+                  "<span class="error-word">很颜色好看</span>" → "<span class="correct-word">颜色很好看</span>"
+                  <span class="error-reason">词语顺序错误，副词「很」应置于形容词前</span>
+                </div>
+              </div>
+              <div class="error-item">
+                <div class="error-num">3</div>
+                <div class="error-detail">
+                  "<span class="error-word">开的很漂亮</span>" → "<span class="correct-word">开得很漂亮</span>"
+                  <span class="error-reason">补语前应用「得」而非「的」</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 模块2: 病句 -->
+        <div class="analysis-card">
+          <div class="analysis-card-header" onclick="toggleCard(this)">
+            <div class="module-icon" style="background:#fff8e1">✏️</div>
+            <div class="module-info">
+              <div class="module-name">② 病句修改</div>
+              <div class="module-meta">发现 2 处病句</div>
+            </div>
+            <span class="module-badge badge-warn">2 处病句</span>
+            <span class="expand-arrow">▼</span>
+          </div>
+          <div class="analysis-body">
+            <div class="bingju-item">
+              <div class="sentence-original">❌ 心情非常高兴的。</div>
+              <div class="sentence-arrow">↓ 修改建议</div>
+              <div class="sentence-fixed">✅ 我们的心情非常愉快。</div>
+              <div class="sentence-reason">💡 原句缺少主语，且"心情高兴"搭配不当，应为"心情愉快/高兴极了"</div>
+            </div>
+            <div class="bingju-item">
+              <div class="sentence-original">❌ 天气真的太好了。</div>
+              <div class="sentence-arrow">↓ 修改建议</div>
+              <div class="sentence-fixed">✅ 回家路上，阳光明媚，微风轻拂，天气格外好。</div>
+              <div class="sentence-reason">💡 原句过于简单，表意不清，缺乏具体描写</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 模块3: 修辞手法 -->
+        <div class="analysis-card">
+          <div class="analysis-card-header" onclick="toggleCard(this)">
+            <div class="module-icon" style="background:#f3e5f5">🎨</div>
+            <div class="module-info">
+              <div class="module-name">③ 修辞手法润色</div>
+              <div class="module-meta">建议 3 处增加修辞</div>
+            </div>
+            <span class="module-badge badge-warn">3 条建议</span>
+            <span class="expand-arrow">▼</span>
+          </div>
+          <div class="analysis-body">
+            <div class="rhetoric-item">
+              <div class="rhetoric-original">📍 原句：公园里的花开得很漂亮，有红的，有黄的，还有蓝的。</div>
+              <div class="rhetoric-tags">
+                <span class="rhetoric-tag tag-paibi">排比 ✓ 已用</span>
+                <span class="rhetoric-tag tag-biyv">可增加比喻</span>
+              </div>
+              <div class="rhetoric-suggest">建议增加比喻，使花色描写更生动：</div>
+              <div class="rhetoric-example">💡 "公园里百花齐放，红的像火焰，黄的似金光，蓝的若碧空，令人心旷神怡。"</div>
+            </div>
+            <div class="rhetoric-item">
+              <div class="rhetoric-original">📍 原句：我看到一只小蝴蝶在花上飞。</div>
+              <div class="rhetoric-tags">
+                <span class="rhetoric-tag tag-yongren">可增加拟人</span>
+              </div>
+              <div class="rhetoric-suggest">建议用拟人手法，赋予蝴蝶生命感：</div>
+              <div class="rhetoric-example">💡 "一只小蝴蝶翩翩起舞，像是花园里最快乐的小精灵，在花丛间穿梭嬉戏。"</div>
+            </div>
+            <div class="rhetoric-item">
+              <div class="rhetoric-original">📍 原句：回家路上，天气格外好。</div>
+              <div class="rhetoric-tags">
+                <span class="rhetoric-tag tag-set">可增加设问</span>
+                <span class="rhetoric-tag tag-biyv">可增加比喻</span>
+              </div>
+              <div class="rhetoric-suggest">建议增加景物细节描写配合情感：</div>
+              <div class="rhetoric-example">💡 "回家路上，金色的阳光像温柔的手掌抚摸着我，微风轻轻吹过，带走了一身的疲惫，只留下满满的快乐。"</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 模块4: 语言风格 -->
+        <div class="analysis-card">
+          <div class="analysis-card-header" onclick="toggleCard(this)">
+            <div class="module-icon" style="background:#e3f2fd">🎭</div>
+            <div class="module-info">
+              <div class="module-name">④ 语言风格分析</div>
+              <div class="module-meta">风格较为单一，建议丰富</div>
+            </div>
+            <span class="module-badge badge-warn">待丰富</span>
+            <span class="expand-arrow">▼</span>
+          </div>
+          <div class="analysis-body">
+            <div class="style-radar">
+              <div class="style-item">
+                <div class="style-label">叙述性</div>
+                <div class="style-bar-wrap"><div class="style-bar" style="width:80%;background:#667eea"></div></div>
+                <div class="style-score">80 / 100</div>
+              </div>
+              <div class="style-item">
+                <div class="style-label">描写性</div>
+                <div class="style-bar-wrap"><div class="style-bar" style="width:40%;background:#f06292"></div></div>
+                <div class="style-score">40 / 100</div>
+              </div>
+              <div class="style-item">
+                <div class="style-label">抒情性</div>
+                <div class="style-bar-wrap"><div class="style-bar" style="width:50%;background:#ffb74d"></div></div>
+                <div class="style-score">50 / 100</div>
+              </div>
+              <div class="style-item">
+                <div class="style-label">议论性</div>
+                <div class="style-bar-wrap"><div class="style-bar" style="width:10%;background:#4db6ac"></div></div>
+                <div class="style-score">10 / 100</div>
+              </div>
+            </div>
+            <div class="style-suggest-box">
+              📌 <strong>点评：</strong>文章以叙事为主，平铺直叙，缺乏景物细描和情感抒发。建议在叙事中穿插对花、蝴蝶的详细描写（描写性），并在结尾处用 1-2 句话表达内心感受（抒情性），让文章层次更丰富、情感更立体。
+            </div>
+          </div>
+        </div>
+
+        <!-- 模块5: 情感表达 -->
+        <div class="analysis-card">
+          <div class="analysis-card-header" onclick="toggleCard(this)">
+            <div class="module-icon" style="background:#fce4ec">💭</div>
+            <div class="module-info">
+              <div class="module-name">⑤ 情感表达分析</div>
+              <div class="module-meta">情感略显表面，可深化</div>
+            </div>
+            <span class="module-badge badge-warn">可深化</span>
+            <span class="expand-arrow">▼</span>
+          </div>
+          <div class="analysis-body">
+            <div class="emotion-chart">
+              <div class="emotion-bar-item">
+                <div style="flex:1;display:flex;align-items:flex-end">
+                  <div class="emotion-bar-fill" style="height:80px;background:#4caf50"></div>
+                </div>
+                <div class="emotion-bar-label">快乐</div>
+              </div>
+              <div class="emotion-bar-item">
+                <div style="flex:1;display:flex;align-items:flex-end">
+                  <div class="emotion-bar-fill" style="height:40px;background:#2196f3"></div>
+                </div>
+                <div class="emotion-bar-label">好奇</div>
+              </div>
+              <div class="emotion-bar-item">
+                <div style="flex:1;display:flex;align-items:flex-end">
+                  <div class="emotion-bar-fill" style="height:20px;background:#ff9800"></div>
+                </div>
+                <div class="emotion-bar-label">感动</div>
+              </div>
+              <div class="emotion-bar-item">
+                <div style="flex:1;display:flex;align-items:flex-end">
+                  <div class="emotion-bar-fill" style="height:10px;background:#9c27b0"></div>
+                </div>
+                <div class="emotion-bar-label">惊喜</div>
+              </div>
+              <div class="emotion-bar-item">
+                <div style="flex:1;display:flex;align-items:flex-end">
+                  <div class="emotion-bar-fill" style="height:5px;background:#f44336"></div>
+                </div>
+                <div class="emotion-bar-label">其他</div>
+              </div>
+            </div>
+            <div class="emotion-tip">
+              💡 <strong>分析：</strong>文章能感受到愉快的基调，但情感表达较为直白（"心情非常高兴"）。建议通过具体的场景描写来<strong>间接烘托</strong>情感，例如：看到蝴蝶时的惊喜、与妈妈一起拍照时的幸福感，用细节让读者感同身受，而非直接说"高兴"。
+            </div>
+          </div>
+        </div>
+
+        <!-- 模块6: 写作手法 -->
+        <div class="analysis-card">
+          <div class="analysis-card-header" onclick="toggleCard(this)">
+            <div class="module-icon" style="background:#e8f5e9">🖊️</div>
+            <div class="module-info">
+              <div class="module-name">⑥ 写作手法点评</div>
+              <div class="module-meta">2 种已用 · 建议增加 3 种</div>
+            </div>
+            <span class="module-badge badge-good">有亮点</span>
+            <span class="expand-arrow">▼</span>
+          </div>
+          <div class="analysis-body">
+            <div class="method-item">
+              <div class="method-dot" style="background:#4caf50"></div>
+              <div class="method-content"><strong>排比</strong>｜"有红的、有黄的、还有蓝的"——已运用，句式整齐有节奏感</div>
+              <span class="method-status status-used">✓ 已用</span>
+            </div>
+            <div class="method-item">
+              <div class="method-dot" style="background:#4caf50"></div>
+              <div class="method-content"><strong>白描</strong>｜记录了游园经过，逻辑清晰——已运用</div>
+              <span class="method-status status-used">✓ 已用</span>
+            </div>
+            <div class="method-item">
+              <div class="method-dot" style="background:#2196f3"></div>
+              <div class="method-content"><strong>动静结合</strong>｜可在描写花（静）的同时，加入蝴蝶飞舞（动）的对比描写，画面更生动</div>
+              <span class="method-status status-suggest">+ 建议</span>
+            </div>
+            <div class="method-item">
+              <div class="method-dot" style="background:#2196f3"></div>
+              <div class="method-content"><strong>借景抒情</strong>｜结尾处可通过回家路上的美景，自然流露愉快心情，避免直白表述</div>
+              <span class="method-status status-suggest">+ 建议</span>
+            </div>
+            <div class="method-item">
+              <div class="method-dot" style="background:#2196f3"></div>
+              <div class="method-content"><strong>细节描写</strong>｜拍照瞬间、蝴蝶停落花上的刹那，用细节勾勒记忆画面</div>
+              <span class="method-status status-suggest">+ 建议</span>
+            </div>
+            <div class="info-box">
+              🏆 <strong>总评：</strong>这篇作文记叙了一次愉快的公园之行，思路清晰，但整体语言较为平淡。如能运用更多修辞和写作技法，将"看到了什么、感受到了什么"写得更具体，文章的感染力会大大提升！继续加油！ 💪
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 底部操作 -->
+      <div class="result-actions">
+        <button class="action-btn btn-share" onclick="showToast('已复制分享链接')">📤 分享</button>
+        <button class="action-btn btn-save" onclick="showToast('已保存到历史记录')">💾 保存</button>
+        <button class="action-btn btn-reanalyze" onclick="showPage('page-camera')">📷 重新批改</button>
+      </div>
+    </div>
+
+    <!-- ====== 历史记录页 ====== -->
+    <div class="page" id="page-history">
+      <div class="status-bar">
+        <span>9:41</span>
+        <span>📶 🔋</span>
+      </div>
+      <div class="nav-bar">
+        <div class="nav-back" onclick="showPage('page-home')">‹</div>
+        <div class="nav-title">批改历史</div>
+        <div class="nav-right" style="font-size:14px;color:#667eea;cursor:pointer">筛选</div>
+      </div>
+      <div class="history-list">
+        <div class="history-item" onclick="showPage('page-result')">
+          <div class="history-thumb">📝</div>
+          <div class="history-info">
+            <div class="history-title">《公园游记》</div>
+            <div class="history-meta">2026-05-16 · 小学3年级</div>
+            <div class="history-tags">
+              <span class="history-tag" style="background:#fff0f0;color:#e53935">3处错字</span>
+              <span class="history-tag" style="background:#fff8e1;color:#f57c00">2处病句</span>
+            </div>
+          </div>
+          <div class="history-score">72</div>
+        </div>
+        <div class="history-item" onclick="showToast('查看历史记录')">
+          <div class="history-thumb">📄</div>
+          <div class="history-info">
+            <div class="history-title">《我的家乡》</div>
+            <div class="history-meta">2026-05-14 · 小学4年级</div>
+            <div class="history-tags">
+              <span class="history-tag" style="background:#e8f5e9;color:#2e7d32">优秀作文</span>
+            </div>
+          </div>
+          <div class="history-score" style="color:#2e7d32">88</div>
+        </div>
+        <div class="history-item" onclick="showToast('查看历史记录')">
+          <div class="history-thumb">📃</div>
+          <div class="history-info">
+            <div class="history-title">《春天来了》</div>
+            <div class="history-meta">2026-05-10 · 小学3年级</div>
+            <div class="history-tags">
+              <span class="history-tag" style="background:#fff0f0;color:#e53935">5处错字</span>
+              <span class="history-tag" style="background:#f3e5f5;color:#7b1fa2">待润色</span>
+            </div>
+          </div>
+          <div class="history-score" style="color:#f57c00">61</div>
+        </div>
+        <div class="history-item" onclick="showToast('查看历史记录')">
+          <div class="history-thumb">📋</div>
+          <div class="history-info">
+            <div class="history-title">《难忘的一天》</div>
+            <div class="history-meta">2026-05-08 · 小学5年级</div>
+            <div class="history-tags">
+              <span class="history-tag" style="background:#e8f5e9;color:#2e7d32">良好</span>
+            </div>
+          </div>
+          <div class="history-score">79</div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-item" onclick="showPage('page-home')">
+          <div class="nav-icon">🏠</div>首页
+        </div>
+        <div class="nav-item" onclick="showPage('page-camera')">
+          <div class="nav-icon">📷</div>拍照
+        </div>
+        <div class="nav-item active">
+          <div class="nav-icon">📋</div>历史
+        </div>
+        <div class="nav-item" onclick="showToast('个人中心开发中')">
+          <div class="nav-icon">👤</div>我的
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+  </div>
+</div>
+
+<!-- 右侧说明栏 -->
+<div style="margin-left:40px;max-width:460px;color:white;">
+  <h1 style="font-size:32px;font-weight:800;margin-bottom:8px;background:linear-gradient(90deg,#667eea,#f093fb);-webkit-background-clip:text;-webkit-text-fill-color:transparent">作文宝典</h1>
+  <p style="font-size:15px;color:rgba(255,255,255,0.7);margin-bottom:30px;line-height:1.6">AI 智能作文批改 App · 交互原型演示</p>
+
+  <div style="background:rgba(255,255,255,0.05);border-radius:16px;padding:20px;margin-bottom:16px;border:1px solid rgba(255,255,255,0.1)">
+    <h3 style="font-size:14px;font-weight:700;margin-bottom:14px;color:rgba(255,255,255,0.9)">📱 页面流程</h3>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div onclick="showPageFromOutside('page-home')" style="padding:10px 14px;background:rgba(102,126,234,0.2);border-radius:10px;cursor:pointer;font-size:13px;color:rgba(255,255,255,0.85);border:1px solid rgba(102,126,234,0.3);transition:background 0.2s" onmouseover="this.style.background='rgba(102,126,234,0.35)'" onmouseout="this.style.background='rgba(102,126,234,0.2)'">🏠 首页 — 功能入口</div>
+      <div onclick="showPageFromOutside('page-camera')" style="padding:10px 14px;background:rgba(102,126,234,0.2);border-radius:10px;cursor:pointer;font-size:13px;color:rgba(255,255,255,0.85);border:1px solid rgba(102,126,234,0.3);transition:background 0.2s" onmouseover="this.style.background='rgba(102,126,234,0.35)'" onmouseout="this.style.background='rgba(102,126,234,0.2)'">📷 拍照页 — 取景批改</div>
+      <div onclick="triggerAnalysis()" style="padding:10px 14px;background:rgba(102,126,234,0.2);border-radius:10px;cursor:pointer;font-size:13px;color:rgba(255,255,255,0.85);border:1px solid rgba(102,126,234,0.3);transition:background 0.2s" onmouseover="this.style.background='rgba(102,126,234,0.35)'" onmouseout="this.style.background='rgba(102,126,234,0.2)'">⚙️ 分析中 — AI 处理动画</div>
+      <div onclick="showPageFromOutside('page-result')" style="padding:10px 14px;background:rgba(102,126,234,0.2);border-radius:10px;cursor:pointer;font-size:13px;color:rgba(255,255,255,0.85);border:1px solid rgba(102,126,234,0.3);transition:background 0.2s" onmouseover="this.style.background='rgba(102,126,234,0.35)'" onmouseout="this.style.background='rgba(102,126,234,0.2)'">📊 结果页 — 6维度批改报告</div>
+      <div onclick="showPageFromOutside('page-history')" style="padding:10px 14px;background:rgba(102,126,234,0.2);border-radius:10px;cursor:pointer;font-size:13px;color:rgba(255,255,255,0.85);border:1px solid rgba(102,126,234,0.3);transition:background 0.2s" onmouseover="this.style.background='rgba(102,126,234,0.35)'" onmouseout="this.style.background='rgba(102,126,234,0.2)'">📋 历史页 — 记录管理</div>
+    </div>
+  </div>
+
+  <div style="background:rgba(255,255,255,0.05);border-radius:16px;padding:20px;margin-bottom:16px;border:1px solid rgba(255,255,255,0.1)">
+    <h3 style="font-size:14px;font-weight:700;margin-bottom:14px;color:rgba(255,255,255,0.9)">🔬 六大分析维度</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="padding:8px 10px;background:rgba(229,57,53,0.15);border-radius:8px;font-size:12px;color:rgba(255,255,255,0.8)">🔍 ① 错字词检测</div>
+      <div style="padding:8px 10px;background:rgba(245,124,0,0.15);border-radius:8px;font-size:12px;color:rgba(255,255,255,0.8)">✏️ ② 病句修改</div>
+      <div style="padding:8px 10px;background:rgba(156,39,176,0.15);border-radius:8px;font-size:12px;color:rgba(255,255,255,0.8)">🎨 ③ 修辞润色</div>
+      <div style="padding:8px 10px;background:rgba(33,150,243,0.15);border-radius:8px;font-size:12px;color:rgba(255,255,255,0.8)">🎭 ④ 语言风格</div>
+      <div style="padding:8px 10px;background:rgba(233,30,99,0.15);border-radius:8px;font-size:12px;color:rgba(255,255,255,0.8)">💭 ⑤ 情感表达</div>
+      <div style="padding:8px 10px;background:rgba(76,175,80,0.15);border-radius:8px;font-size:12px;color:rgba(255,255,255,0.8)">🖊️ ⑥ 写作手法</div>
+    </div>
+  </div>
+
+  <div style="background:rgba(255,255,255,0.05);border-radius:16px;padding:20px;border:1px solid rgba(255,255,255,0.1)">
+    <h3 style="font-size:14px;font-weight:700;margin-bottom:12px;color:rgba(255,255,255,0.9)">🛠 技术架构</h3>
+    <div style="font-size:12px;color:rgba(255,255,255,0.65);line-height:2">
+      <div>📷 <strong style="color:rgba(255,255,255,0.85)">拍照</strong> → Android Camera2 API / CameraX</div>
+      <div>🔤 <strong style="color:rgba(255,255,255,0.85)">OCR识别</strong> → 腾讯 OCR / Google ML Kit</div>
+      <div>🤖 <strong style="color:rgba(255,255,255,0.85)">AI分析</strong> → 大语言模型 API (结构化输出)</div>
+      <div>💾 <strong style="color:rgba(255,255,255,0.85)">本地存储</strong> → Room Database</div>
+      <div>🎨 <strong style="color:rgba(255,255,255,0.85)">UI框架</strong> → Jetpack Compose</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function showPageFromOutside(id) {
+  showPage(id);
+}
+function startAnalysis() {
+  showPage('page-analyzing');
+  // 重置进度条动画
+  const bar = document.getElementById('progressBar');
+  bar.style.animation = 'none';
+  bar.offsetHeight; // reflow
+  bar.style.animation = 'progress 3s ease-out forwards';
+  setTimeout(() => showPage('page-result'), 3200);
+}
+function triggerAnalysis() {
+  showPage('page-analyzing');
+  const bar = document.getElementById('progressBar');
+  bar.style.animation = 'none';
+  bar.offsetHeight;
+  bar.style.animation = 'progress 3s ease-out forwards';
+  setTimeout(() => showPage('page-result'), 3200);
+}
+function toggleCard(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.expand-arrow');
+  body.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+</script>
+</body>
+</html>
