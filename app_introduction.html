@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>作文金典 - AI智能作文批改</title>
+<style>
+:root{--primary:#4CAF82;--primary-dark:#2E7D5A;--primary-light:#E8F5E9;--accent:#FFB300;--text:#1A1A1A;--text2:#555;--border:#E0E0E0;--bg:#FAFAFA;--white:#FFF}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif;background:var(--bg);color:var(--text);line-height:1.8}
+
+.hero{background:linear-gradient(160deg,#1B5E3A 0%,var(--primary) 50%,#66BB6A 100%);padding:52px 24px 44px;text-align:center;color:#fff;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:rgba(255,255,255,.06);border-radius:50%}
+.hero .logo{width:76px;height:76px;background:rgba(255,255,255,.15);border-radius:20px;display:inline-flex;align-items:center;justify-content:center;font-size:38px;margin-bottom:18px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2)}
+.hero h1{font-size:30px;font-weight:800;letter-spacing:2px}
+.hero .tagline{font-size:15px;opacity:.9;margin-top:6px}
+.hero .badge{display:inline-block;background:rgba(255,179,0,.25);border:1px solid rgba(255,179,0,.5);color:var(--accent);border-radius:20px;padding:3px 14px;font-size:12px;font-weight:600;margin-top:14px}
+.hero .stats{display:flex;justify-content:center;gap:28px;margin-top:24px}
+.hero .st{text-align:center}
+.hero .st-n{font-size:22px;font-weight:800}
+.hero .st-l{font-size:11px;opacity:.7;margin-top:2px}
+
+.container{max-width:860px;margin:0 auto;padding:0 24px 56px}
+
+.card{background:var(--white);border-radius:14px;border:1px solid var(--border);margin-top:-24px;position:relative;z-index:1;overflow:hidden}
+.card+.card{margin-top:20px}
+.ch{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border)}
+.ch.g{background:var(--primary-light)}.ch.y{background:#FFF8E1}.ch.b{background:#E3F2FD}.ch.p{background:#F3E5F5}
+.ci{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ci.g{background:var(--primary)}.ci.y{background:var(--accent)}.ci.b{background:#1E88E5}.ci.p{background:#8E24AA}
+.ch h2{font-size:16px;font-weight:700}
+.ch.g h2{color:var(--primary-dark)}.ch.y h2{color:#7A5C00}.ch.b h2{color:#0D47A1}.ch.p h2{color:#6A1B9A}
+.cb{padding:20px 22px}
+p{font-size:14.5px;color:var(--text2);margin-bottom:10px}p:last-child{margin-bottom:0}
+
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-top:4px}
+.fi{border:1px solid var(--border);border-radius:11px;padding:16px;transition:transform .2s,box-shadow .2s}
+.fi:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.fi .f-icon{font-size:26px;margin-bottom:8px}
+.fi h3{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
+.fi p{font-size:12.5px;margin:0;line-height:1.5}
+
+.dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px}
+.dc{border-radius:11px;padding:16px 12px;text-align:center;border:1px solid rgba(0,0,0,.04)}
+.dc .d-icon{font-size:28px;margin-bottom:6px}
+.dc h4{font-size:13px;font-weight:700;margin-bottom:3px}
+.dc p{font-size:11.5px;margin:0;line-height:1.4}
+.dr{background:#FFEBEE}.dr h4{color:#C62828}
+.do{background:#FBE9E7}.do h4{color:#D84315}
+.dy{background:#FFF8E1}.dy h4{color:#F57F17}
+.dg{background:var(--primary-light)}.dg h4{color:#2E7D32}
+.db{background:#E3F2FD}.db h4{color:#1565C0}
+.dp{background:#F3E5F5}.dp h4{color:#7B1FA2}
+
+.stbl{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px}
+.stbl th{background:var(--primary-light);color:var(--primary-dark);font-weight:700;padding:9px 10px;text-align:center;border:1px solid var(--border)}
+.stbl td{padding:9px 10px;border:1px solid var(--border);text-align:center;color:var(--text2)}
+.stbl tr:nth-child(even) td{background:#F9FBF9}
+
+.flow{display:flex;align-items:flex-start;justify-content:center;flex-wrap:wrap;gap:0;margin-top:8px}
+.fs{display:flex;flex-direction:column;align-items:center;text-align:center;width:120px}
+.fs .sn{width:42px;height:42px;border-radius:50%;background:var(--primary);color:#fff;font-size:17px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+.fs h4{font-size:13px;font-weight:700;margin-bottom:2px}
+.fs p{font-size:11px;line-height:1.4}
+.fa{font-size:20px;color:var(--primary);padding:12px 4px 0;flex-shrink:0}
+
+.formats{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.ft{display:inline-flex;align-items:center;gap:5px;background:var(--primary-light);border:1px solid rgba(76,175,130,.2);border-radius:8px;padding:7px 12px;font-size:12.5px;font-weight:600;color:var(--primary-dark)}
+.ft .fm{font-size:16px}
+
+.cta{text-align:center;padding:28px 24px;margin-top:20px}
+.cta h3{font-size:20px;font-weight:700;margin-bottom:6px}
+.cta p{font-size:14px;margin-bottom:18px}
+
+.footer{text-align:center;padding:20px;font-size:12px;color:#999;border-top:1px solid var(--border);margin-top:24px}
+
+@media(max-width:600px){
+.hero h1{font-size:24px}.hero .stats{gap:16px}.container{padding:0 16px 40px}.cb{padding:16px}
+.dgrid{grid-template-columns:repeat(2,1fr)}.fs{width:90px}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="logo">📝</div>
+  <h1>作文金典</h1>
+  <div class="tagline">AI 智能作文批改 · 让学生写好每一篇作文</div>
+  <div class="badge">V1.01</div>
+  <div class="stats">
+    <div class="st"><div class="st-n">6</div><div class="st-l">大分析维度</div></div>
+    <div class="st"><div class="st-n">5</div><div class="st-l">学段全覆盖</div></div>
+    <div class="st"><div class="st-n">120</div><div class="st-l">条评价标准</div></div>
+    <div class="st"><div class="st-n">5</div><div class="st-l">种导入方式</div></div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- 产品简介 -->
+<div class="card">
+  <div class="ch g"><div class="ci g">📖</div><h2>产品简介</h2></div>
+  <div class="cb">
+    <p><strong>作文金典</strong>由<strong>长沙市勉知信息科技有限责任公司</strong>自主研发，是一款面向小学至高中全学段学生的 AI 智能作文批改应用。以"手机拍照 → AI 智能批改"为核心流程，帮助学生快速获得专业级作文反馈。</p>
+    <p>应用内置<strong>五段式累积升格评价体系</strong>，根据学生所在年级自动匹配评价标准，从错字词、病句、修辞、语言风格、情感表达、写作手法六大维度深度分析，让每一次批改都精准、有用、看得懂。</p>
+    <p>由一线教育工作者主导设计——懂教育、懂学生、懂作文。</p>
+  </div>
+</div>
+
+<!-- 核心功能 -->
+<div class="card">
+  <div class="ch y"><div class="ci y">⚡</div><h2>核心功能</h2></div>
+  <div class="cb">
+    <div class="fgrid">
+      <div class="fi"><div class="f-icon">📷</div><h3>拍照识别</h3><p>手机拍照自动 OCR 识别作文文字，告别手动输入</p></div>
+      <div class="fi"><div class="f-icon">🤖</div><h3>AI 六维批改</h3><p>六大维度全方位分析，逐句点评、精准定位问题</p></div>
+      <div class="fi"><div class="f-icon">✏️</div><h3>修改与重批</h3><p>在线编辑修改，AI 比对激励重批，版本历史完整保存</p></div>
+      <div class="fi"><div class="f-icon">📝</div><h3>AI 作文</h3><p>输入主题，AI 按学段生成范文，适合学习借鉴</p></div>
+      <div class="fi"><div class="f-icon">📊</div><h3>学习成果</h3><p>AI 分析成长轨迹，生成个性化学习报告</p></div>
+      <div class="fi"><div class="f-icon">🎨</div><h3>AI 润色</h3><p>一键 AI 智能修改，直接提升文章表达质量</p></div>
+      <div class="fi"><div class="f-icon">📁</div><h3>多格式导入</h3><p>支持拍照、键盘输入、JPG/PNG/TXT/DOCX/PDF</p></div>
+      <div class="fi"><div class="f-icon">📚</div><h3>批改历史</h3><p>所有批改记录本地保存，随时回顾、对比进步</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 六维分析 -->
+<div class="card">
+  <div class="ch b"><div class="ci b">🎯</div><h2>六维智能分析体系</h2></div>
+  <div class="cb">
+    <p>每篇作文经过 AI 六大维度深度分析，逐句引用原文、精准定位，给出具体可操作的修改建议：</p>
+    <div class="dgrid">
+      <div class="dc dr"><div class="d-icon">🔤</div><h4>错字词检测</h4><p>识别错别字、用词不当</p></div>
+      <div class="dc do"><div class="d-icon">🔧</div><h4>病句修改</h4><p>发现并修正语法错误</p></div>
+      <div class="dc dy"><div class="d-icon">✨</div><h4>修辞手法</h4><p>分析修辞运用，润色提升</p></div>
+      <div class="dc dg"><div class="d-icon">💬</div><h4>语言风格</h4><p>评估语言表达准确性</p></div>
+      <div class="dc db"><div class="d-icon">💖</div><h4>情感表达</h4><p>分析情感是否充分到位</p></div>
+      <div class="dc dp"><div class="d-icon">🌟</div><h4>写作手法</h4><p>点评结构、手法与创意</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 五段式评价 -->
+<div class="card">
+  <div class="ch p"><div class="ci p">📈</div><h2>五段式累积升格评价</h2></div>
+  <div class="cb">
+    <p>不同学段有不同标准，高学段自动累积低学段基础维度，以发展为核心、过程为导向，激励持续进步：</p>
+    <table class="stbl">
+      <thead><tr><th>学段</th><th>年级</th><th>满分</th><th>评价维度</th></tr></thead>
+      <tbody>
+        <tr><td><strong>S1</strong></td><td>一 ~ 二年级</td><td>20 分</td><td>内容·结构·语言·情感·创意·规范（5项）</td></tr>
+        <tr><td><strong>S2</strong></td><td>三 ~ 四年级</td><td>30 分</td><td>在 S1 基础上新增 5 项（共 10 项）</td></tr>
+        <tr><td><strong>S3</strong></td><td>五 ~ 六年级</td><td>30 分</td><td>在 S2 基础上新增 5 项（共 15 项）</td></tr>
+        <tr><td><strong>S4</strong></td><td>七 ~ 九年级</td><td>50 分</td><td>新增「思想深度」「文体意识」（共 20 项）</td></tr>
+        <tr><td><strong>S5</strong></td><td>高一 ~ 高三</td><td>60 分</td><td>新增「论证逻辑」「视野格局」（共 25 项）</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:10px;font-size:12.5px;color:#888;">每学段每维度设 A/B/C/D 四个等级，共 120 条详细评分标准。</p>
+  </div>
+</div>
+
+<!-- 使用流程 -->
+<div class="card">
+  <div class="ch g"><div class="ci g">🚀</div><h2>三步完成批改</h2></div>
+  <div class="cb">
+    <div class="flow">
+      <div class="fs"><div class="sn">1</div><h4>提交作文</h4><p>拍照/输入/<br>导入文件</p></div>
+      <div class="fa">→</div>
+      <div class="fs"><div class="sn">2</div><h4>AI 批改</h4><p>六维分析<br>逐句点评</p></div>
+      <div class="fa">→</div>
+      <div class="fs"><div class="sn">3</div><h4>查看报告</h4><p>评分+建议<br>修改再提升</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 多格式支持 -->
+<div class="card">
+  <div class="ch y"><div class="ci y">📂</div><h2>多格式支持</h2></div>
+  <div class="cb">
+    <p>无论作文以何种形式存在，都能轻松导入批改：</p>
+    <div class="formats">
+      <div class="ft"><span class="fm">📷</span>拍照识别</div>
+      <div class="ft"><span class="fm">⌨️</span>键盘输入</div>
+      <div class="ft"><span class="fm">🖼️</span>JPG / PNG</div>
+      <div class="ft"><span class="fm">📄</span>PDF</div>
+      <div class="ft"><span class="fm">📝</span>DOCX</div>
+      <div class="ft"><span class="fm">📃</span>TXT</div>
+    </div>
+  </div>
+</div>
+
+<!-- 技术特色 -->
+<div class="card">
+  <div class="ch b"><div class="ci b">🛠️</div><h2>技术特色</h2></div>
+  <div class="cb">
+    <div class="fgrid">
+      <div class="fi"><div class="f-icon">🧠</div><h3>大语言模型驱动</h3><p>OpenAI 兼容接口，结构化 JSON 输出，批改结果精准可控</p></div>
+      <div class="fi"><div class="f-icon">📱</div><h3>纯 Android 原生</h3><p>Kotlin + Jetpack Compose + Material3，流畅顺滑体验</p></div>
+      <div class="fi"><div class="f-icon">🔒</div><h3>数据安全</h3><p>华为 AGC 云数据库加密存储，数据不出境，HTTPS 全链路加密</p></div>
+      <div class="fi"><div class="f-icon">🎓</div><h3>教育专业设计</h3><p>一线教师主导评价体系设计，批评与建议比例 3:7，以激励为主</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="card">
+  <div class="cta">
+    <h3>🌱 让 AI 成为孩子的写作导师</h3>
+    <p>从第一篇作文开始，用智能批改点亮写作之路</p>
+    <p style="font-size:13px;color:#888;">开发者：长沙市勉知信息科技有限责任公司 ｜ 反馈：短信 13135394498 ｜ 邮箱 middlesoft@126.com</p>
+  </div>
+</div>
+
+</div>
+
+<div class="footer">
+  <p>© 2026 长沙市勉知信息科技有限责任公司 · 保留所有权利</p>
+</div>
+
+</body>
+</html>
