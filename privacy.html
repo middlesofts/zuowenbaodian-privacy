@@ -190,8 +190,8 @@
 <div class="hero">
   <div class="hero-icon">📝</div>
   <h1>作文金典 隐私政策</h1>
-  <div class="subtitle">长沙市勉知信息科技有限责任公司</div>
-  <div class="badge">适用版本：V1.01 及以上</div>
+  <div class="subtitle">长沙勉知信息科技有限公司</div>
+  <div class="badge">适用版本：V1.02 及以上</div>
 </div>
 
 <!-- ── 主体 ── -->
@@ -199,10 +199,10 @@
 
   <!-- 更新时间 -->
   <div class="meta-bar">
-    <span>📅 <strong>发布日期：</strong>2026年7月1日</span>
-    <span>🔄 <strong>生效日期：</strong>2026年7月1日</span>
+    <span>📅 <strong>发布日期：</strong>2026年9月10日</span>
+    <span>🔄 <strong>生效日期：</strong>2026年9月10日</span>
     <span>📱 <strong>适用平台：</strong>Android</span>
-    <span>🏢 <strong>开发者：</strong>长沙市勉知信息科技有限责任公司</span>
+    <span>🏢 <strong>开发者：</strong>长沙勉知信息科技有限公司</span>
   </div>
 
   <!-- 引言 -->
@@ -212,7 +212,7 @@
       <h2>引言</h2>
     </div>
     <div class="section-body">
-      <p>《作文金典》（以下简称"本应用"或"我们"）由长沙市勉知信息科技有限责任公司开发和运营。我们深知个人信息对您的重要性，将竭力保护您的个人信息安全可靠。</p>
+      <p>《作文金典》（以下简称"本应用"或"我们"）由长沙勉知信息科技有限公司开发和运营。我们深知个人信息对您的重要性，将竭力保护您的个人信息安全可靠。</p>
       <p>本隐私政策说明我们如何收集、使用和保护您在使用本应用时提供的个人信息。<strong>请在使用本应用前仔细阅读本政策。</strong>如您不同意本政策，请停止使用本应用。</p>
       <div class="highlight-box">
         📌 本应用主要面向中小学生用户，如您未满14周岁，请在监护人陪同下阅读本政策并在监护人同意后使用本应用。
@@ -275,11 +275,17 @@
             <td>服务行为自动生成</td>
             <td>✅ 必须（扣费验证）</td>
           </tr>
+          <tr>
+            <td>教师认证材料</td>
+            <td>教师资格证照片（仅申请教师认证的用户提交，用于 AI 核验与人工审核）</td>
+            <td>用户主动上传</td>
+            <td>仅教师认证功能必须</td>
+          </tr>
         </tbody>
       </table>
 
       <div class="warn-box">
-        ⚠️ 我们<strong>不会</strong>收集您的位置信息、通讯录、相机（除用户主动拍照时）、麦克风（语音输入由系统 Intent 处理，音频数据不经过本应用服务器）等敏感权限数据。
+        ⚠️ 我们<strong>不会</strong>收集您的位置信息、通讯录等敏感权限数据。相机与麦克风仅在您主动使用拍照识别、语音输入功能时调用，音频数据由系统处理、不经过本应用服务器；我们不会在后台状态下访问您的相机或麦克风。
       </div>
     </div>
   </div>
@@ -332,14 +338,14 @@
             <td>仅存储在您的设备上，卸载应用即删除</td>
           </tr>
           <tr>
-            <td>☁️ 华为 AppGallery Connect（AGC）云数据库</td>
+            <td>☁️ 腾讯云 CloudBase（云函数 + 云数据库）</td>
             <td>账户信息（手机号、年级、余额、课时）、服务订购记录</td>
-            <td>存储于华为 AGC 平台，遵循华为数据安全标准，数据存储于中国境内服务器</td>
+            <td>存储于腾讯云上海地域，遵循腾讯云数据安全标准，数据存储于中国境内服务器</td>
           </tr>
           <tr>
-            <td>🤖 AI 服务接口（第三方 LLM）</td>
-            <td>作文文本（仅在批改时传输，不留存）</td>
-            <td>仅用于单次批改调用，AI 服务商不存储原文内容</td>
+            <td>🤖 AI 服务接口（第三方 LLM / 云端 OCR）</td>
+            <td>作文文本、待识别的作文图片（仅在调用时传输，不留存）</td>
+            <td>仅用于单次 AI 批改 / OCR 识别调用，AI 服务商不存储原文内容</td>
           </tr>
         </tbody>
       </table>
@@ -347,7 +353,7 @@
       <p><strong>存储期限：</strong>您的账户数据在账号注销后 30 天内从服务器彻底删除；设备本地数据在卸载应用时立即删除。</p>
 
       <div class="highlight-box">
-        🛡️ 所有与服务器的通信均采用 HTTPS 加密传输。华为 AGC 云数据库具备数据加密存储能力，我们的服务均部署在中国大陆，数据不跨境传输。
+        🛡️ 所有与服务器的通信均采用 HTTPS 加密传输。腾讯云 CloudBase 数据库具备数据加密存储能力，我们的服务均部署在中国大陆，数据不跨境传输。
       </div>
     </div>
   </div>
@@ -408,13 +414,23 @@
         <tbody>
           <tr>
             <td>Google ML Kit（文字识别）</td>
-            <td>OCR 识别作文图片中的文字</td>
+            <td>OCR 识别作文图片中的文字（本地识别兜底；主路径为云端 AI 识别）</td>
             <td>仅在设备本地处理，不上传图片</td>
           </tr>
           <tr>
-            <td>华为 AGC（AppGallery Connect）</td>
-            <td>云数据库、账号体系</td>
-            <td>设备标识、账户信息</td>
+            <td>腾讯云 CloudBase SDK</td>
+            <td>云函数调用、云数据库读写（账户体系与服务端逻辑）</td>
+            <td>设备标识、账户信息（手机号、年级、余额、课时）</td>
+          </tr>
+          <tr>
+            <td>腾讯云短信（SMS）服务</td>
+            <td>注册/登录验证码发送</td>
+            <td>手机号码（仅用于发送验证码短信）</td>
+          </tr>
+          <tr>
+            <td>腾讯云 COS 对象存储</td>
+            <td>教师认证材料（教师资格证照片）的临时存储与审核</td>
+            <td>用户上传的证件照片（仅认证审核用途）</td>
           </tr>
           <tr>
             <td>Android CameraX</td>
@@ -426,6 +442,11 @@
             <td>展示第三方广告、统计广告曝光与点击数据、优化广告收益</td>
             <td>设备唯一标识（OAID / IDFA）、网络状态、应用运行信息</td>
           </tr>
+          <tr>
+            <td>友盟+ U-App 统计 SDK</td>
+            <td>统计分析活跃用户、页面路径、事件上报，优化产品功能</td>
+            <td>设备唯一标识（OAID / Android ID）、网络状态、应用运行信息</td>
+          </tr>
         </tbody>
       </table>
 
@@ -433,6 +454,13 @@
         <p style="margin:0 0 8px 0;font-size:14px;color:var(--primary-dark);"><strong>📋 友盟+ U-AppWin 聚合广告 SDK 详细说明</strong></p>
         <p style="margin:0;font-size:14px;color:var(--text-secondary);">
           本 APP 集成友盟+ U-AppWin 聚合广告 SDK（运营主体：友盟同欣（北京）科技有限公司），用于展示第三方广告、统计广告曝光与点击数据、优化广告收益。该 SDK 会采集设备唯一标识（OAID / IDFA）、网络状态、应用运行信息，仅用于广告填充、反作弊、数据统计；您可在系统设置关闭个性化广告推荐，关闭后仅展示非个性化广告，不影响 APP 基础写作功能。
+        </p>
+      </div>
+
+      <div style="background:#F3F9F5;border-left:4px solid var(--primary);border-radius:0 8px 8px 0;padding:16px 20px;margin:16px 0;">
+        <p style="margin:0 0 8px 0;font-size:14px;color:var(--primary-dark);"><strong>📋 友盟+ U-App 统计 SDK 详细说明</strong></p>
+        <p style="margin:0;font-size:14px;color:var(--text-secondary);">
+          本 APP 集成友盟+ U-App 统计 SDK（运营主体：友盟同欣（北京）科技有限公司），用于统计分析活跃用户、页面路径、事件上报等，以优化产品功能与用户体验。该 SDK 会采集设备唯一标识（OAID / Android ID）、网络状态、应用运行信息，仅用于统计分析；在用户未同意隐私政策前，SDK 不会启动任何数据采集行为。
         </p>
       </div>
 
@@ -499,12 +527,12 @@
         <div class="contact-item">
           <div class="icon">🏢</div>
           <div class="label">开发者 / 运营方</div>
-          <div class="value">长沙市勉知信息科技有限责任公司</div>
+          <div class="value">长沙勉知信息科技有限公司</div>
         </div>
         <div class="contact-item">
           <div class="icon">📍</div>
           <div class="label">注册地</div>
-          <div class="value">湖南省邵东市</div>
+          <div class="value">湖南省长沙市岳麓区学士街道</div>
         </div>
       </div>
 
@@ -517,7 +545,7 @@
 </div><!-- /container -->
 
 <div class="footer">
-  <p>© 2026 长沙市勉知信息科技有限责任公司 · 保留所有权利</p>
+  <p>© 2026 长沙勉知信息科技有限公司 · 保留所有权利</p>
   <p style="margin-top:6px;">本政策依据《中华人民共和国个人信息保护法》《网络安全法》及相关法规制定</p>
 </div>
 
